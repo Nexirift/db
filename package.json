@@ -1,6 +1,9 @@
 {
   "name": "@nexirift/db",
   "version": "0.0.1",
+  "description": "The Nexirift Drizzle database configuration and schema.",
+  "author": "Nexirift",
+  "license": "GPL-3.0-only",
   "type": "module",
   "module": "index.ts",
   "scripts": {
