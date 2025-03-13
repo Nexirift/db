@@ -29,6 +29,10 @@
     "drizzle-orm": "^0.40.0",
     "pg": "^8.13.3"
   },
+  "publishConfig": {
+    "directory": "dist",
+    "access": "public"
+  },
   "exports": {
     "./*": {
       "types": "./build/types/*.d.ts",
