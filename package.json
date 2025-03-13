@@ -7,21 +7,22 @@
   "type": "module",
   "module": "index.ts",
   "scripts": {
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "bun src/migrate.ts",
-    "db:studio": "drizzle-kit studio",
+    "db:generate": "drizzle-kit generate --config dist/drizzle.config.cjs",
+    "db:migrate": "bun dist/index.cjs --config dist/drizzle.config.cjs",
+    "db:studio": "drizzle-kit studio --config dist/drizzle.config.cjs",
     "db:all": "bun db:generate && bun db:migrate && bun db:studio",
     "db:start": "./dev/db/start.sh",
     "db:reset": "./dev/db/reset.sh",
     "kv:start": "./dev/kv/start.sh",
     "kv:reset": "./dev/kv/reset.sh",
-    "compile": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
-    "build:clean": "rm -rf ./dist"
+    "build": "bunx unbuild",
+    "prepack": "bunx unbuild"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/pg": "^8.11.11",
-    "drizzle-kit": "^0.30.5"
+    "drizzle-kit": "^0.30.5",
+    "unbuild": "^3.5.0"
   },
   "peerDependencies": {
     "@electric-sql/pglite": "^0.2.17",
@@ -34,11 +35,15 @@
     "access": "public"
   },
   "exports": {
-    "./*": {
-      "types": "./build/types/*.d.ts",
-      "require": "./build/cjs/*.js",
-      "import": "./build/esm/*.js",
-      "default": "./build/esm/*.js"
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
     }
-  }
+  },
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**",
+    "dev/**"
+  ]
 }

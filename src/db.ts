@@ -26,7 +26,7 @@ if (process.env.NODE_ENV !== "test") {
   Promise.all([
     import("@electric-sql/pglite"),
     import("drizzle-orm/pglite"),
-    import("@electric-sql/pglite/dist/contrib/citext"),
+    import("@electric-sql/pglite/contrib/citext"),
   ]).then(([{ PGlite: testClient }, { drizzle: testDrizzle }, { citext }]) => {
     db = testDrizzle(new testClient({ extensions: { citext } }), {
       schema,

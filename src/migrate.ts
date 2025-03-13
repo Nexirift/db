@@ -8,7 +8,9 @@ import { resolve } from "path";
 
 // Get migrations folder path from CLI args or use default
 const migrationsFolder =
-  process.argv[2] ?? resolve(__dirname + "/../migrations");
+  process.argv[2] && !process.argv[2].startsWith("--config")
+    ? process.argv[2]
+    : resolve(__dirname + "/../migrations");
 
 /**
  * Handles database migrations based on environment
