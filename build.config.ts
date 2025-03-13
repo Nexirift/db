@@ -14,5 +14,5 @@ export default defineBuildConfig({
   clean: false,
   failOnWarn: false,
   externals: ["drizzle-orm", "@electric-sql/pglite"],
-  entries: ["index.ts"],
+  entries: ["index.ts", "drizzle.config.ts"],
 });
