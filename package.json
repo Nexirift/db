@@ -14,17 +14,27 @@
     "db:start": "./dev/db/start.sh",
     "db:reset": "./dev/db/reset.sh",
     "kv:start": "./dev/kv/start.sh",
-    "kv:reset": "./dev/kv/reset.sh"
+    "kv:reset": "./dev/kv/reset.sh",
+    "compile": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
+    "build:clean": "rm -rf ./dist"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "^0.2.17",
     "@types/bun": "latest",
     "@types/pg": "^8.11.11",
     "drizzle-kit": "^0.30.5"
   },
   "peerDependencies": {
+    "@electric-sql/pglite": "^0.2.17",
     "typescript": "^5.7.3",
     "drizzle-orm": "^0.40.0",
     "pg": "^8.13.3"
+  },
+  "exports": {
+    "./*": {
+      "types": "./build/types/*.d.ts",
+      "require": "./build/cjs/*.js",
+      "import": "./build/esm/*.js",
+      "default": "./build/esm/*.js"
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { InferSelectModel, relations, sql } from "drizzle-orm";
+import { type InferSelectModel, relations, sql } from "drizzle-orm";
 import { boolean, pgEnum, pgTable, timestamp } from "drizzle-orm/pg-core";
 import {
   citext,
