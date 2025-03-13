@@ -2,6 +2,7 @@ import { InferSelectModel, relations, sql } from "drizzle-orm";
 import { boolean, pgEnum, pgTable, timestamp } from "drizzle-orm/pg-core";
 import {
   citext,
+  invitation,
   post,
   postCollection,
   postInteraction,
@@ -35,13 +36,15 @@ export const user = pgTable("user", {
   profession: citext("profession"),
   location: citext("location"),
   website: citext("website"),
-  stripe_customer_id: citext("stripe_customer_id"),
-  stripe_subscription_id: citext("stripe_subscription_id"),
   role: citext("role"),
   banned: boolean("banned"),
   banReason: citext("ban_reason"),
   banExpires: timestamp("ban_expires"),
   twoFactorEnabled: boolean("two_factor_enabled"),
+  birthday: citext("birthday").notNull(), // *sigh* better-auth doesn't process Dates properly...
+  stripeCustomerId: citext("stripe_customer_id"),
+  usernameAliases: citext("username_aliases"),
+  invitation: citext("invitation"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")
     .notNull()

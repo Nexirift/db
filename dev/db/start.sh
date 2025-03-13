@@ -45,4 +45,4 @@ docker run -d \
   -e POSTGRES_PASSWORD="$DB_PASSWORD" \
   -e POSTGRES_DB=nexirift \
   -p "$DB_PORT":5432 \
-  docker.io/postgres:latest && echo "Database container '$DB_CONTAINER_NAME' was successfully created"
+  postgres-wal2json && echo "Database container '$DB_CONTAINER_NAME' was successfully created"

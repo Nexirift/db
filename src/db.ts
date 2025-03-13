@@ -38,12 +38,14 @@ function connect() {
   if (db.$client instanceof prodClient) {
     return db.$client.connect();
   }
+  return null;
 }
 
 function end() {
   if (db.$client instanceof prodClient) {
     return db.$client.end();
   }
+  return null;
 }
 
 export { db, connect, end };
