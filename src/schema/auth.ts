@@ -158,7 +158,7 @@ export const violation = pgTable("violation", {
   am_metadata: citext("am_metadata"),
 });
 
-export const vortex_dispute = pgTable("vortex_dispute", {
+export const vortexDispute = pgTable("vortex_dispute", {
   id: citext("id").primaryKey(),
   violationId: citext("violation_id")
     .notNull()
