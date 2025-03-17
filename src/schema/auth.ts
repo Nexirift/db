@@ -154,11 +154,11 @@ export const violation = pgTable("violation", {
     onDelete: "cascade",
   }),
   updatedAt: timestamp("updated_at").notNull(),
-  amStatus: citext("am_status"),
+  amStatus: citext("am_status").notNull(),
   amMetadata: citext("am_metadata"),
 });
 
-export const vortexDispute = pgTable("vortex_dispute", {
+export const violationDispute = pgTable("violation_dispute", {
   id: citext("id").primaryKey(),
   violationId: citext("violation_id")
     .notNull()
