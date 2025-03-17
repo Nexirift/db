@@ -142,15 +142,37 @@ export const violation = pgTable("violation", {
   publicComment: citext("public_comment"),
   internalNote: citext("internal_note"),
   severity: integer("severity").notNull(),
+  applicableRules: citext("applicable_rules").notNull(),
+  overturned: boolean("overturned"),
   moderatorId: citext("moderator_id").references(() => user.id, {
     onDelete: "cascade",
   }),
   userId: citext("user_id").references(() => user.id, { onDelete: "cascade" }),
-  disputed: boolean("disputed").notNull(),
   expiresAt: timestamp("expires_at"),
   createdAt: timestamp("created_at").notNull(),
   lastUpdatedBy: citext("last_updated_by").references(() => user.id, {
     onDelete: "cascade",
   }),
+  updatedAt: timestamp("updated_at").notNull(),
+  am_status: citext("am_status"),
+  am_metadata: citext("am_metadata"),
+});
+
+export const vortex_dispute = pgTable("vortex_dispute", {
+  id: citext("id").primaryKey(),
+  violationId: citext("violation_id")
+    .notNull()
+    .references(() => violation.id, { onDelete: "cascade" }),
+  userId: citext("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  reason: citext("reason").notNull(),
+  status: citext("status").notNull(),
+  justification: citext("justification"),
+  reviewedBy: citext("reviewed_by").references(() => user.id, {
+    onDelete: "cascade",
+  }),
+  reviewedAt: timestamp("reviewed_at"),
+  createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
 });
