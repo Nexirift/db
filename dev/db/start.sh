@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd "$(dirname "$0")/../.."
+cd "$(pwd)/../../.."
 
 DB_CONTAINER_NAME="nexirift-postgres"
 

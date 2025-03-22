@@ -2,17 +2,16 @@ import { type InferSelectModel, relations, sql } from "drizzle-orm";
 import { boolean, pgEnum, pgTable, timestamp } from "drizzle-orm/pg-core";
 import {
   citext,
-  invitation,
   post,
   postCollection,
   postInteraction,
   userConversationParticipant,
   userPlanet,
   userPlanetMember,
-  userProfileField,
   userRelationship,
   userSetting,
   userVerification,
+  userProfile,
 } from "..";
 
 export const userType = pgEnum("user_type", ["PUBLIC", "PRIVATE"]);
@@ -26,16 +25,9 @@ export const user = pgTable("user", {
   username: citext("username").notNull().unique(),
   displayUsername: citext("display_username"),
   displayName: citext("display_name"),
-  bio: citext("bio"),
-  extendedBio: citext("extended_bio"),
   avatar: citext("avatar"),
-  banner: citext("banner"),
-  background: citext("background"),
   suspended: boolean("suspended").default(false),
   type: userType("user_type").default("PUBLIC"),
-  profession: citext("profession"),
-  location: citext("location"),
-  website: citext("website"),
   role: citext("role"),
   banned: boolean("banned"),
   banReason: citext("ban_reason"),
@@ -45,6 +37,8 @@ export const user = pgTable("user", {
   stripeCustomerId: citext("stripe_customer_id"),
   usernameAliases: citext("username_aliases"),
   invitation: citext("invitation"),
+  flags: citext("flags"), // private version of attributes
+  attributes: citext("attributes"), // public version of flags
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")
     .notNull()
@@ -53,6 +47,7 @@ export const user = pgTable("user", {
 });
 
 export const userRelations = relations(user, ({ one, many }) => ({
+  profile: one(userProfile),
   toRelationships: many(userRelationship, {
     relationName: "user_to_relationships",
   }),
@@ -62,7 +57,6 @@ export const userRelations = relations(user, ({ one, many }) => ({
   posts: many(post),
   postInteraction: many(postInteraction),
   verification: one(userVerification),
-  profileFields: many(userProfileField),
   ownedPlanets: many(userPlanet),
   joinedPlanets: many(userPlanetMember),
   settings: many(userSetting),

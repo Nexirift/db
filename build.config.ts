@@ -13,6 +13,6 @@ export default defineBuildConfig({
   outDir: "dist",
   clean: false,
   failOnWarn: false,
-  externals: ["drizzle-orm", "@electric-sql/pglite"],
+  externals: ["drizzle-orm", "drizzle-kit", "@electric-sql/pglite"],
   entries: ["index.ts", "drizzle.config.ts"],
 });
