@@ -13,6 +13,7 @@ export const userSession = pgTable("user_session", {
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   impersonatedBy: citext("impersonated_by"),
+  activeOrganizationId: citext("active_organization_id"),
 });
 
 export const userAccount = pgTable("user_account", {
