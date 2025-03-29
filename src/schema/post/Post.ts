@@ -14,6 +14,7 @@ import {
   postInteraction,
   postMedia,
   postPoll,
+  topicPost,
   user,
   userPlanetPost,
 } from "..";
@@ -38,6 +39,9 @@ export const post = pgTable("post", {
 });
 
 export const postRelations = relations(post, ({ one, many }) => ({
+  topics: many(topicPost, {
+    relationName: "post_topics",
+  }),
   author: one(user, {
     fields: [post.authorId],
     references: [user.id],

@@ -12,6 +12,7 @@ import {
   userSetting,
   userVerification,
   userProfile,
+  topicUser,
 } from "..";
 
 export const userType = pgEnum("user_type", ["PUBLIC", "PRIVATE"]);
@@ -47,6 +48,9 @@ export const user = pgTable("user", {
 });
 
 export const userRelations = relations(user, ({ one, many }) => ({
+  topics: many(topicUser, {
+    relationName: "user_topics",
+  }),
   profile: one(userProfile),
   toRelationships: many(userRelationship, {
     relationName: "user_to_relationships",
