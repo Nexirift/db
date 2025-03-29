@@ -176,3 +176,5 @@ dist
 
 # Project specific
 migrations
+.npmrc
+bunfig.toml
