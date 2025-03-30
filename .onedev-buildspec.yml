@@ -6,8 +6,8 @@ jobs:
         name: pull
         remoteUrl: https://github.com/Nexirift/db
         refs: refs/heads/* refs/tags/*
-        withLfs: false
-        force: false
+        withLfs: true
+        force: true
         condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
     retryCondition: never
     maxRetries: 3
