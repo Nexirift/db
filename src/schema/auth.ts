@@ -177,3 +177,10 @@ export const violationDispute = pgTable("violation_dispute", {
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
 });
+
+export const jwks = pgTable("jwks", {
+  id: citext("id").primaryKey(),
+  publicKey: citext("public_key").notNull(),
+  privateKey: citext("private_key").notNull(),
+  createdAt: timestamp("created_at").notNull(),
+});
