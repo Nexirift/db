@@ -41,7 +41,6 @@ async function isConnected() {
 }
 
 async function connect() {
-  if (await isConnected()) return null;
   if (db.$client instanceof prodClient) {
     return db.$client.connect();
   }
@@ -49,7 +48,6 @@ async function connect() {
 }
 
 async function end() {
-  if (!(await isConnected())) return null;
   if (db.$client instanceof prodClient) {
     return db.$client.end();
   }
