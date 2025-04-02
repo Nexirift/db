@@ -84,6 +84,6 @@ export type TopicUserSchemaType = InferSelectModel<typeof topicUser>;
 export type TopicPostSchemaType = InferSelectModel<typeof topicPost>;
 
 export const cosmosSetting = pgTable("cosmos_setting", {
-  key: citext("key").notNull(),
+  key: citext("key").notNull().primaryKey(),
   value: citext("value").notNull(),
 });
