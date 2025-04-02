@@ -11,6 +11,8 @@ export * from "./post";
 export * from "./user";
 export * from "./auth";
 
+// TODO: Migrate these to a separate file.
+
 export const topic = pgTable("topic", {
   id: citext("id").primaryKey(),
   name: citext("name").notNull(),
@@ -80,3 +82,8 @@ export const topicPostRelations = relations(topicPost, ({ one }) => ({
 export type TopicSchemaType = InferSelectModel<typeof topic>;
 export type TopicUserSchemaType = InferSelectModel<typeof topicUser>;
 export type TopicPostSchemaType = InferSelectModel<typeof topicPost>;
+
+export const cosmosSetting = pgTable("cosmos_setting", {
+  key: citext("key").notNull(),
+  value: citext("value").notNull(),
+});
