@@ -3,6 +3,7 @@ import { Client as prodClient } from "pg";
 import * as schema from "./schema";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { PgliteDatabase } from "drizzle-orm/pglite";
+import { sql } from "drizzle-orm";
 
 // Initialize production database client with connection string from environment
 export const prodDbClient = new prodClient({
@@ -34,18 +35,25 @@ if (process.env.NODE_ENV !== "test") {
   });
 }
 
-function connect() {
+async function isConnected() {
+  const isConnected = await db.execute(sql`select 1`);
+  return isConnected.rows[0]["?column?"] === 1;
+}
+
+async function connect() {
+  if (await isConnected()) return null;
   if (db.$client instanceof prodClient) {
     return db.$client.connect();
   }
   return null;
 }
 
-function end() {
+async function end() {
+  if (!(await isConnected())) return null;
   if (db.$client instanceof prodClient) {
     return db.$client.end();
   }
   return null;
 }
 
-export { db, connect, end };
+export { db, isConnected, connect, end };
