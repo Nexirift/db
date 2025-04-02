@@ -41,17 +41,41 @@ async function isConnected() {
 }
 
 async function connect() {
-  if (db.$client instanceof prodClient) {
-    return db.$client.connect();
+  if (!(db.$client instanceof prodClient)) {
+    return null;
   }
-  return null;
+
+  try {
+    return await db.$client.connect();
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message !==
+        "Client has already been connected. You cannot reuse a client."
+    ) {
+      console.error("[@nexirift/db] Database connection error:", error);
+      return null;
+    }
+  }
 }
 
 async function end() {
-  if (db.$client instanceof prodClient) {
-    return db.$client.end();
+  if (!(db.$client instanceof prodClient)) {
+    return null;
   }
-  return null;
+
+  try {
+    return await db.$client.end();
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message !==
+        "Client has already been connected. You cannot reuse a client."
+    ) {
+      console.error("[@nexirift/db] Database connection error:", error);
+      return null;
+    }
+  }
 }
 
 export { db, isConnected, connect, end };
