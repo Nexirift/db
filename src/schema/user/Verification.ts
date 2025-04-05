@@ -4,9 +4,8 @@ import { citext, user } from "..";
 
 export const userVerificationType = pgEnum("user_verification_type", [
   "NOTABLE",
-  "BUSINESS",
-  "OFFICIAL",
-  "TESTER",
+  "ORGANIZATION",
+  "GOVERNMENT",
 ]);
 
 export const userVerification = pgTable(
