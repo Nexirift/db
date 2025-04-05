@@ -39,6 +39,10 @@
     ".": {
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
+    },
+    "./schema": {
+      "import": "./dist/schema/index.mjs",
+      "require": "./dist/schema/index.cjs"
     }
   },
   "main": "./dist/index.cjs",
