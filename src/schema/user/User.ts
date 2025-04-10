@@ -40,6 +40,8 @@ export const user = pgTable("user", {
   invitation: citext("invitation"),
   flags: citext("flags"), // private version of attributes
   attributes: citext("attributes"), // public version of flags
+  apPublicKey: citext("ap_public_key"),
+  apPrivateKey: citext("ap_private_key"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")
     .notNull()
