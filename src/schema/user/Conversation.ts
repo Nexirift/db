@@ -70,15 +70,21 @@ export const userConversationMessageRelations = relations(
 export const userConversationParticipant = pgTable(
   "user_conversation_participant",
   {
+    id: citext("id")
+      .default(sql`gen_random_uuid()`)
+      .notNull(),
     conversationId: citext("conversation_id")
       .notNull()
       .references(() => userConversation.id),
     userId: citext("user_id")
       .notNull()
       .references(() => user.id),
+    active: boolean("active").notNull().default(true),
     joinedAt: timestamp("joined_at").notNull().defaultNow(),
   },
-  (table) => [primaryKey({ columns: [table.conversationId, table.userId] })],
+  (table) => [
+    primaryKey({ columns: [table.id, table.conversationId, table.userId] }),
+  ],
 );
 
 export const userConversationParticipantRelations = relations(
@@ -129,7 +135,7 @@ export const userConversationParticipantRole = pgTable(
   {
     participantId: citext("participant_id")
       .notNull()
-      .references(() => userConversationParticipant.userId),
+      .references(() => userConversationParticipant.id),
     roleId: citext("role_id")
       .notNull()
       .references(() => userConversationRole.id),
@@ -142,7 +148,7 @@ export const userConversationParticipantRoleRelations = relations(
   ({ one }) => ({
     participant: one(userConversationParticipant, {
       fields: [userConversationParticipantRole.participantId],
-      references: [userConversationParticipant.userId],
+      references: [userConversationParticipant.id],
     }),
     role: one(userConversationRole, {
       fields: [userConversationParticipantRole.roleId],
