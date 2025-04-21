@@ -72,7 +72,8 @@ export const userConversationParticipant = pgTable(
   {
     id: citext("id")
       .default(sql`gen_random_uuid()`)
-      .notNull(),
+      .notNull()
+      .unique(),
     conversationId: citext("conversation_id")
       .notNull()
       .references(() => userConversation.id),
