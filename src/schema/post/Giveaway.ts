@@ -16,20 +16,19 @@ export const postGiveawayType = pgEnum("post_giveaway_type", [
   "RAFFLE",
 ]);
 
-export const postGiveaway = pgTable(
-  "post_giveaway",
-  {
-    id: citext("id").default(sql`gen_random_uuid()`),
-    postId: citext("post_id")
-      .notNull()
-      .references(() => post.id),
-    type: postGiveawayType("post_giveaway_type").notNull(),
-    finish: timestamp("finish").notNull().defaultNow(),
-    requirements: json("requirements").notNull(),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-  },
-  (table) => [primaryKey({ columns: [table.id, table.postId] })],
-);
+export const postGiveaway = pgTable("post_giveaway", {
+  id: citext("id")
+    .default(sql`gen_random_uuid()`)
+    .notNull()
+    .primaryKey(),
+  postId: citext("post_id")
+    .notNull()
+    .references(() => post.id),
+  type: postGiveawayType("post_giveaway_type").notNull(),
+  finish: timestamp("finish").notNull().defaultNow(),
+  requirements: json("requirements").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
 
 export const postGiveawayRelations = relations(postGiveaway, ({ one }) => ({
   post: one(post, {
