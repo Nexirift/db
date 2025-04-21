@@ -75,8 +75,7 @@ export const userConversationParticipant = pgTable(
       .references(() => userConversation.id),
     userId: citext("user_id")
       .notNull()
-      .references(() => user.id)
-      .unique(),
+      .references(() => user.id),
     joinedAt: timestamp("joined_at").notNull().defaultNow(),
   },
   (table) => [primaryKey({ columns: [table.conversationId, table.userId] })],
