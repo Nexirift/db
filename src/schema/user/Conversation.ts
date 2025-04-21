@@ -44,7 +44,7 @@ export const userConversationMessage = pgTable(
       .references(() => userConversation.id),
     senderId: citext("sender_id")
       .notNull()
-      .references(() => userConversationParticipant.userId),
+      .references(() => userConversationParticipant.id),
     content: citext("content").notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
@@ -62,7 +62,7 @@ export const userConversationMessageRelations = relations(
     }),
     sender: one(userConversationParticipant, {
       fields: [userConversationMessage.senderId],
-      references: [userConversationParticipant.userId],
+      references: [userConversationParticipant.id],
     }),
   }),
 );
