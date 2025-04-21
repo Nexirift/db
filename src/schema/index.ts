@@ -1,4 +1,4 @@
-import { pgTable, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, primaryKey, timestamp } from "drizzle-orm/pg-core";
 import { citext } from "./types";
 import { relations, type InferSelectModel } from "drizzle-orm";
 import { post } from "./post";
@@ -14,8 +14,7 @@ export * from "./auth";
 // TODO: Migrate these to a separate file.
 
 export const topic = pgTable("topic", {
-  id: citext("id").primaryKey(),
-  name: citext("name").notNull(),
+  name: citext("name").notNull().primaryKey(),
   description: citext("description"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")
@@ -33,15 +32,19 @@ export const topicRelations = relations(topic, ({ many }) => ({
   }),
 }));
 
-export const topicUser = pgTable("topic_user", {
-  topicId: citext("topic_id").notNull(),
-  userId: citext("user_id").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at")
-    .notNull()
-    .defaultNow()
-    .$onUpdate(() => new Date()),
-});
+export const topicUser = pgTable(
+  "topic_user",
+  {
+    topicName: citext("topic_name").notNull(),
+    userId: citext("user_id").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at")
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (table) => [primaryKey({ columns: [table.topicName, table.userId] })],
+);
 
 export const topicUserRelations = relations(topicUser, ({ one }) => ({
   user: one(user, {
@@ -51,20 +54,24 @@ export const topicUserRelations = relations(topicUser, ({ one }) => ({
   }),
   topic: one(topic, {
     relationName: "topic_to_users",
-    fields: [topicUser.topicId],
-    references: [topic.id],
+    fields: [topicUser.topicName],
+    references: [topic.name],
   }),
 }));
 
-export const topicPost = pgTable("topic_post", {
-  topicId: citext("topic_id").notNull(),
-  postId: citext("post_id").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at")
-    .notNull()
-    .defaultNow()
-    .$onUpdate(() => new Date()),
-});
+export const topicPost = pgTable(
+  "topic_post",
+  {
+    topicName: citext("topic_name").notNull(),
+    postId: citext("post_id").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at")
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (table) => [primaryKey({ columns: [table.topicName, table.postId] })],
+);
 
 export const topicPostRelations = relations(topicPost, ({ one }) => ({
   post: one(post, {
@@ -74,8 +81,8 @@ export const topicPostRelations = relations(topicPost, ({ one }) => ({
   }),
   topic: one(topic, {
     relationName: "topic_to_posts",
-    fields: [topicPost.topicId],
-    references: [topic.id],
+    fields: [topicPost.topicName],
+    references: [topic.name],
   }),
 }));
 

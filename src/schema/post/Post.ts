@@ -1,4 +1,4 @@
-import { type InferSelectModel, relations } from "drizzle-orm";
+import { type InferSelectModel, relations, sql } from "drizzle-orm";
 import {
   type AnyPgColumn,
   boolean,
@@ -20,11 +20,11 @@ import {
 } from "..";
 
 export const post = pgTable("post", {
-  id: uuid("id").defaultRandom().primaryKey(),
+  id: citext("id").default(sql`gen_random_uuid()`),
   authorId: citext("author_id")
     .notNull()
     .references(() => user.id),
-  parentId: uuid("parent_id").references((): AnyPgColumn => post.id),
+  parentId: citext("parent_id").references((): AnyPgColumn => post.id),
   content: citext("content").notNull(),
   published: boolean("published").notNull().default(false),
   deleted: boolean("deleted").notNull().default(false),

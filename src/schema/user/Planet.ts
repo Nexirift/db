@@ -1,9 +1,11 @@
-import { type InferSelectModel, relations } from "drizzle-orm";
-import { pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
+import { type InferSelectModel, relations, sql } from "drizzle-orm";
+import { pgTable, primaryKey, timestamp, uuid } from "drizzle-orm/pg-core";
 import { citext, post, user } from "..";
 
 export const userPlanet = pgTable("user_planet", {
-  id: uuid("id").defaultRandom().primaryKey(),
+  id: citext("id")
+    .default(sql`gen_random_uuid()`)
+    .primaryKey(),
   creatorId: citext("creator_id")
     .notNull()
     .references(() => user.id),
@@ -21,15 +23,19 @@ export const userPlanetRelations = relations(userPlanet, ({ one, many }) => ({
   posts: many(userPlanetPost),
 }));
 
-export const userPlanetMember = pgTable("user_planet_member", {
-  userId: citext("user_id")
-    .notNull()
-    .references(() => user.id),
-  planetId: uuid("planet_id")
-    .notNull()
-    .references(() => userPlanet.id),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-});
+export const userPlanetMember = pgTable(
+  "user_planet_member",
+  {
+    userId: citext("user_id")
+      .notNull()
+      .references(() => user.id),
+    planetId: citext("planet_id")
+      .notNull()
+      .references(() => userPlanet.id),
+    joinedAt: timestamp("joined_at").notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.userId, table.planetId] })],
+);
 
 export const userPlanetMemberRelations = relations(
   userPlanetMember,
@@ -45,24 +51,21 @@ export const userPlanetMemberRelations = relations(
   }),
 );
 
-export const userPlanetPost = pgTable("user_planet_post", {
-  userId: citext("user_id")
-    .notNull()
-    .references(() => user.id),
-  planetId: uuid("planet_id")
-    .notNull()
-    .references(() => userPlanet.id),
-  postId: uuid("post_id")
-    .notNull()
-    .references(() => post.id),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-});
+export const userPlanetPost = pgTable(
+  "user_planet_post",
+  {
+    postId: citext("post_id")
+      .notNull()
+      .references(() => post.id),
+    planetId: citext("planet_id")
+      .notNull()
+      .references(() => userPlanet.id),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.postId, table.planetId] })],
+);
 
 export const userPlanetPostRelations = relations(userPlanetPost, ({ one }) => ({
-  user: one(user, {
-    fields: [userPlanetPost.userId],
-    references: [user.id],
-  }),
   planet: one(userPlanet, {
     fields: [userPlanetPost.planetId],
     references: [userPlanet.id],

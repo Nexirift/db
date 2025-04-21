@@ -13,14 +13,14 @@ export const postInteraction = pgTable(
     userId: citext("user_id")
       .notNull()
       .references(() => user.id),
-    postId: uuid("post_id")
+    postId: citext("post_id")
       .notNull()
       .references(() => post.id),
     type: postInteractionType("post_interaction_type").notNull(),
   },
-  (t) => ({
-    pk: primaryKey(t.userId, t.postId, t.type),
-  }),
+  (table) => [
+    primaryKey({ columns: [table.userId, table.postId, table.type] }),
+  ],
 );
 
 export const postInteractionRelations = relations(

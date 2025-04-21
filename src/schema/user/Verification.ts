@@ -8,23 +8,18 @@ export const userVerificationType = pgEnum("user_verification_type", [
   "GOVERNMENT",
 ]);
 
-export const userVerification = pgTable(
-  "user_verification",
-  {
-    userId: citext("user_id")
-      .notNull()
-      .references(() => user.id),
-    type: userVerificationType("user_verification_type").notNull(),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at")
-      .notNull()
-      .defaultNow()
-      .$onUpdate(() => new Date()),
-  },
-  (t) => ({
-    pk: primaryKey(t.userId),
-  }),
-);
+export const userVerification = pgTable("user_verification", {
+  userId: citext("user_id")
+    .notNull()
+    .primaryKey()
+    .references(() => user.id),
+  type: userVerificationType("user_verification_type").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
 
 export const userVerificationRelations = relations(
   userVerification,

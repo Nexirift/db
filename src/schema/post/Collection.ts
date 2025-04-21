@@ -1,19 +1,19 @@
-import { type InferSelectModel, relations } from "drizzle-orm";
-import { pgEnum, pgTable, primaryKey, uuid } from "drizzle-orm/pg-core";
+import { type InferSelectModel, relations, sql } from "drizzle-orm";
+import { pgEnum, pgTable, primaryKey } from "drizzle-orm/pg-core";
 import { citext, post, user } from "..";
 
-export const postCollectionVisibility = pgEnum("post_collection_visibility", [
+export const postCollectionType = pgEnum("post_collection_type", [
   "PUBLIC",
   "PRIVATE",
 ]);
 
 export const postCollection = pgTable("post_collection", {
-  id: uuid("id").defaultRandom().primaryKey(),
+  id: citext("id")
+    .default(sql`gen_random_uuid()`)
+    .primaryKey(),
   name: citext("name").notNull(),
   description: citext("description"),
-  visibility: postCollectionVisibility("visibility")
-    .notNull()
-    .default("PRIVATE"),
+  type: postCollectionType("type").notNull().default("PRIVATE"),
   userId: citext("user_id")
     .notNull()
     .references(() => user.id),
@@ -34,16 +34,14 @@ export const postCollectionRelations = relations(
 export const postCollectionItem = pgTable(
   "post_collection_item",
   {
-    collectionId: uuid("collection_id")
+    collectionId: citext("collection_id")
       .notNull()
       .references(() => postCollection.id),
-    postId: uuid("post_id")
+    postId: citext("post_id")
       .notNull()
       .references(() => post.id),
   },
-  (t) => ({
-    pk: primaryKey(t.collectionId, t.postId),
-  }),
+  (table) => [primaryKey({ columns: [table.collectionId, table.postId] })],
 );
 
 export const postCollectionItemRelations = relations(

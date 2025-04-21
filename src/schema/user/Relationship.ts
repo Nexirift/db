@@ -26,9 +26,7 @@ export const userRelationship = pgTable(
       .defaultNow()
       .$onUpdate(() => new Date()),
   },
-  (t) => ({
-    pk: primaryKey(t.toId, t.fromId, t.type),
-  }),
+  (table) => [primaryKey({ columns: [table.toId, table.fromId, table.type] })],
 );
 
 export const userRelationshipRelations = relations(

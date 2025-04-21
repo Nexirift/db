@@ -1,10 +1,12 @@
-import { type InferSelectModel, relations } from "drizzle-orm";
-import { pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
+import { type InferSelectModel, relations, sql } from "drizzle-orm";
+import { pgTable, timestamp } from "drizzle-orm/pg-core";
 import { citext, post } from "..";
 
 export const postEditHistory = pgTable("post_edit_history", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  postId: uuid("post_id")
+  id: citext("id")
+    .default(sql`gen_random_uuid()`)
+    .primaryKey(),
+  postId: citext("post_id")
     .notNull()
     .references(() => post.id, { onDelete: "cascade" }),
   content: citext("content").notNull(),

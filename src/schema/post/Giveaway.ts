@@ -1,4 +1,4 @@
-import { type InferSelectModel, relations } from "drizzle-orm";
+import { type InferSelectModel, relations, sql } from "drizzle-orm";
 import {
   boolean,
   integer,
@@ -16,16 +16,20 @@ export const postGiveawayType = pgEnum("post_giveaway_type", [
   "RAFFLE",
 ]);
 
-export const postGiveaway = pgTable("post_giveaway", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  postId: uuid("post_id")
-    .notNull()
-    .references(() => post.id),
-  type: postGiveawayType("post_giveaway_type").notNull(),
-  finish: timestamp("finish").notNull().defaultNow(),
-  requirements: json("requirements").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-});
+export const postGiveaway = pgTable(
+  "post_giveaway",
+  {
+    id: citext("id").default(sql`gen_random_uuid()`),
+    postId: citext("post_id")
+      .notNull()
+      .references(() => post.id),
+    type: postGiveawayType("post_giveaway_type").notNull(),
+    finish: timestamp("finish").notNull().defaultNow(),
+    requirements: json("requirements").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.id, table.postId] })],
+);
 
 export const postGiveawayRelations = relations(postGiveaway, ({ one }) => ({
   post: one(post, {
@@ -40,19 +44,14 @@ export const postGiveawayRelations = relations(postGiveaway, ({ one }) => ({
   }),
 }));
 
-export const postGiveawayMeta = pgTable(
-  "post_giveaway_metadata",
-  {
-    giveawayId: uuid("giveaway_id")
-      .notNull()
-      .references(() => postGiveaway.id),
-    replyLengthMin: integer("reply_length_min").notNull(),
-    mustIncludeMedia: boolean("must_include_media").notNull(),
-  },
-  (t) => ({
-    pk: primaryKey(t.giveawayId),
-  }),
-);
+export const postGiveawayMeta = pgTable("post_giveaway_metadata", {
+  giveawayId: citext("giveaway_id")
+    .notNull()
+    .primaryKey()
+    .references(() => postGiveaway.id),
+  replyLengthMin: integer("reply_length_min").notNull(),
+  mustIncludeMedia: boolean("must_include_media").notNull(),
+});
 
 export const postGiveawayMetaRelations = relations(
   postGiveawayMeta,
@@ -65,17 +64,20 @@ export const postGiveawayMetaRelations = relations(
   }),
 );
 
-export const postGiveawayEntry = pgTable("post_giveaway_entry", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  giveawayId: uuid("giveaway_id")
-    .notNull()
-    .references(() => postGiveaway.id),
-  userId: citext("user_id")
-    .notNull()
-    .references(() => user.id),
-  requirements: json("requirements").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-});
+export const postGiveawayEntry = pgTable(
+  "post_giveaway_entry",
+  {
+    giveawayId: citext("giveaway_id")
+      .notNull()
+      .references(() => postGiveaway.id),
+    userId: citext("user_id")
+      .notNull()
+      .references(() => user.id),
+    requirements: json("requirements").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.giveawayId, table.userId] })],
+);
 
 export const postGiveawayEntryRelations = relations(
   postGiveawayEntry,
