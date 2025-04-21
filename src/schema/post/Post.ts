@@ -20,7 +20,10 @@ import {
 } from "..";
 
 export const post = pgTable("post", {
-  id: citext("id").default(sql`gen_random_uuid()`),
+  id: citext("id")
+    .default(sql`gen_random_uuid()`)
+    .notNull()
+    .primaryKey(),
   authorId: citext("author_id")
     .notNull()
     .references(() => user.id),
