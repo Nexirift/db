@@ -13,7 +13,7 @@ export const userProfileField = pgTable(
   {
     userId: citext("user_id")
       .notNull()
-      .references(() => userProfile.userId),
+      .references(() => userProfile.userId, { onDelete: "cascade" }),
     name: citext("name").notNull(),
     value: citext("value").notNull(),
     spotlighted: boolean("spotlighted").notNull().default(false),

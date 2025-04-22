@@ -5,7 +5,7 @@ import { user, citext, userProfileField } from "../..";
 export const userProfile = pgTable("user_profile", {
   userId: citext("user_id")
     .notNull()
-    .references(() => user.id)
+    .references(() => user.id, { onDelete: "cascade" })
     .primaryKey(),
   bio: citext("bio"),
   extendedBio: citext("extended_bio"),
