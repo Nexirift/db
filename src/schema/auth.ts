@@ -126,7 +126,7 @@ export const subscription = pgTable("subscription", {
   seats: integer("seats"),
 });
 
-export const invitation = pgTable("invitation", {
+export const cosmosInvitation = pgTable("cosmos_invitation", {
   id: citext("id").primaryKey(),
   code: citext("code").notNull().unique(),
   creatorId: citext("creator_id")
