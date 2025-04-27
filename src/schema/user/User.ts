@@ -13,6 +13,7 @@ import {
   userVerification,
   userProfile,
   topicUser,
+  cosmosAuditLog,
 } from "..";
 
 export const userType = pgEnum("user_type", ["PUBLIC", "PRIVATE"]);
@@ -68,6 +69,7 @@ export const userRelations = relations(user, ({ one, many }) => ({
   settings: many(userSetting),
   conversations: many(userConversationParticipant),
   collections: many(postCollection),
+  auditLogs: many(cosmosAuditLog),
 }));
 
 export type UserSchemaType = InferSelectModel<typeof user>;
