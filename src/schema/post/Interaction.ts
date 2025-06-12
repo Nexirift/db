@@ -1,5 +1,11 @@
 import { type InferSelectModel, relations } from "drizzle-orm";
-import { pgEnum, pgTable, primaryKey, uuid } from "drizzle-orm/pg-core";
+import {
+  pgEnum,
+  pgTable,
+  primaryKey,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 import { citext, post, user } from "..";
 
 export const postInteractionType = pgEnum("post_interaction_type", [
@@ -17,6 +23,7 @@ export const postInteraction = pgTable(
       .notNull()
       .references(() => post.id),
     type: postInteractionType("post_interaction_type").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (table) => [
     primaryKey({ columns: [table.userId, table.postId, table.type] }),
