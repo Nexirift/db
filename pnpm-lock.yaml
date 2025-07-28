@@ -11,9 +11,12 @@ importers:
       '@electric-sql/pglite':
         specifier: ^0.3.0
         version: 0.3.5
+      dotenv:
+        specifier: ^17.2.1
+        version: 17.2.1
       drizzle-orm:
-        specifier: ^0.43.1
-        version: 0.43.1(@electric-sql/pglite@0.3.5)(@types/pg@8.15.4)(bun-types@1.2.19(@types/react@19.1.8))(pg@8.16.3)
+        specifier: ^0.44.3
+        version: 0.44.3(@electric-sql/pglite@0.3.5)(@types/pg@8.15.4)(bun-types@1.2.19(@types/react@19.1.8))(pg@8.16.3)
       pg:
         specifier: ^8.15.6
         version: 8.16.3
@@ -653,12 +656,16 @@ packages:
   domutils@3.2.2:
     resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
 
+  dotenv@17.2.1:
+    resolution: {integrity: sha512-kQhDYKZecqnM0fCnzI5eIv5L4cAe/iRI+HqMbO/hbRdTAeXDG+M9FjipUxNfbARuEg4iHIbhnhs78BCHNbSxEQ==}
+    engines: {node: '>=12'}
+
   drizzle-kit@0.31.4:
     resolution: {integrity: sha512-tCPWVZWZqWVx2XUsVpJRnH9Mx0ClVOf5YUHerZ5so1OKSlqww4zy1R5ksEdGRcO3tM3zj0PYN6V48TbQCL1RfA==}
     hasBin: true
 
-  drizzle-orm@0.43.1:
-    resolution: {integrity: sha512-dUcDaZtE/zN4RV/xqGrVSMpnEczxd5cIaoDeor7Zst9wOe/HzC/7eAaulywWGYXdDEc9oBPMjayVEDg0ziTLJA==}
+  drizzle-orm@0.44.3:
+    resolution: {integrity: sha512-8nIiYQxOpgUicEL04YFojJmvC4DNO4KoyXsEIqN44+g6gNBr6hmVpWk3uyAt4CaTiRGDwoU+alfqNNeonLAFOQ==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -674,6 +681,7 @@ packages:
       '@types/better-sqlite3': '*'
       '@types/pg': '*'
       '@types/sql.js': '*'
+      '@upstash/redis': '>=1.34.7'
       '@vercel/postgres': '>=0.8.0'
       '@xata.io/client': '*'
       better-sqlite3: '>=7'
@@ -716,6 +724,8 @@ packages:
       '@types/pg':
         optional: true
       '@types/sql.js':
+        optional: true
+      '@upstash/redis':
         optional: true
       '@vercel/postgres':
         optional: true
@@ -1704,6 +1714,8 @@ snapshots:
       domelementtype: 2.3.0
       domhandler: 5.0.3
 
+  dotenv@17.2.1: {}
+
   drizzle-kit@0.31.4:
     dependencies:
       '@drizzle-team/brocli': 0.10.2
@@ -1713,7 +1725,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.43.1(@electric-sql/pglite@0.3.5)(@types/pg@8.15.4)(bun-types@1.2.19(@types/react@19.1.8))(pg@8.16.3):
+  drizzle-orm@0.44.3(@electric-sql/pglite@0.3.5)(@types/pg@8.15.4)(bun-types@1.2.19(@types/react@19.1.8))(pg@8.16.3):
     optionalDependencies:
       '@electric-sql/pglite': 0.3.5
       '@types/pg': 8.15.4
