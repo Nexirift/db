@@ -178,3 +178,4 @@ dist
 migrations
 .npmrc
 bunfig.toml
+*.bak

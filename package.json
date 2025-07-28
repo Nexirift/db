@@ -7,29 +7,28 @@
   "type": "module",
   "module": "index.ts",
   "scripts": {
-    "switch-registry": "chmod +x ./utility-scripts/switch-registry.sh && ./utility-scripts/switch-registry.sh",
+    "switch-registry": "./utility-scripts/wrapper.sh switch-registry",
     "db:generate": "drizzle-kit generate --config dist/drizzle.config.cjs",
-    "db:migrate": "bun dist/index.cjs --config dist/drizzle.config.cjs",
+    "db:migrate": "node dist/index.cjs --config dist/drizzle.config.cjs",
     "db:studio": "drizzle-kit studio --config dist/drizzle.config.cjs",
-    "db:all": "bun db:generate && bun db:migrate && bun db:studio",
-    "db:start": "./utility-scripts/db/start.sh",
-    "db:reset": "./utility-scripts/db/reset.sh",
-    "kv:start": "./utility-scripts/kv/start.sh",
-    "kv:reset": "./utility-scripts/kv/reset.sh",
-    "build": "bunx unbuild",
-    "prepack": "bunx unbuild"
+    "db:all": "npm run db:generate && npm run db:migrate && npm run db:studio",
+    "db:start": "./utility-scripts/wrapper.sh db/start",
+    "db:reset": "./utility-scripts/wrapper.sh db/reset",
+    "kv:start": "./utility-scripts/wrapper.sh kv/start",
+    "kv:reset": "./utility-scripts/wrapper.sh kv/reset",
+    "build": "unbuild",
+    "prepack": "unbuild"
   },
   "devDependencies": {
-    "@types/bun": "latest",
     "@types/pg": "^8.15.4",
-    "drizzle-kit": "^0.31.1",
-    "unbuild": "^3.5.0"
+    "drizzle-kit": "^0.31.4",
+    "unbuild": "^3.6.0"
   },
   "peerDependencies": {
     "@electric-sql/pglite": "^0.3.0",
-    "typescript": "^5.8.3",
     "drizzle-orm": "^0.43.1",
-    "pg": "^8.15.6"
+    "pg": "^8.15.6",
+    "typescript": "^5.8.3"
   },
   "publishConfig": {
     "directory": "dist",

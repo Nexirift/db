@@ -11,8 +11,10 @@ This repository contains the Drizzle database configuration used for Nexirift's 
 ### Prerequisites
 
 - Node.js v22.13.0 or greater
-- Bun v1.2.2 or greater
-- Local NPM registry
+- (Optional*) pnpm
+- Read the [contributing guide](https://github.com/Nexirift/.github/blob/main/contributing/README.md)
+
+*We use pnpm in testing and production, not npm.*
 
 #### For Database
 
@@ -21,25 +23,12 @@ This repository contains the Drizzle database configuration used for Nexirift's 
 
 *These prerequisites are based on the versions that we are using.*
 
-### Local NPM Registry
-
-Our internal packages are not hosted on the public NPM registry, such as `@nexirift/db`. To use our internal projects, you will need to set up a local NPM registry. During our testing, we noticed that Next.js and shadcn/ui don't like Bun's linked packages.
-
-1. Install Verdaccio: `bun i -g verdaccio`
-2. Start the Verdaccio server locally: `verdaccio`
-3. Create an account: `bunx npm adduser --registry http://localhost:4873`
-    - Example: `developer` | `P@ssw0rd` | `developer@nexirift.com`
-4. Clone any `@nexirift/*` packages using Git
-5. Run `bun publish` on the cloned repositories
-
-*More information: https://verdaccio.org/docs/setup-bun*
-
 ### Installation
 
 1. Clone the repository: `git clone https://github.com/Nexirift/db.git`
-2. Install dependencies with `bun install`
-3. Start the database using `bun db:start-dev`
-4. Generate, migrate and open studio using `bun db:all`
+2. Install dependencies with `pnpm install`
+3. Start the database using `pnpm run db:start-dev`
+4. Generate, migrate and open studio using `pnpm run db:all`
 
 ## Disclaimer
 
