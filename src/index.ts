@@ -1,7 +1,10 @@
-import dotenv from "dotenv";
+// *** types MUST be first. ***
+export * from "./types";
+// ****************************
 
-dotenv.config();
-
-export * from "./db";
-export * from "./schema/index";
-export * from "./migrate";
+export * from "./auth";
+export * from "./cosmos";
+export * from "./organization";
+export * from "./post";
+export * from "./topic";
+export * from "./user";

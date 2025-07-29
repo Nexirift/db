@@ -4,7 +4,7 @@
 
 # Database
 
-This repository contains the Drizzle database configuration used for Nexirift's main projects.
+This repository contains the Drizzle database schema used for Nexirift's main projects.
 
 ## Getting Started (Development)
 
@@ -27,8 +27,7 @@ This repository contains the Drizzle database configuration used for Nexirift's 
 
 1. Clone the repository: `git clone https://github.com/Nexirift/db.git`
 2. Install dependencies with `pnpm install`
-3. Start the database using `pnpm run db:start-dev`
-4. Generate, migrate and open studio using `pnpm run db:all`
+3. Build the package with `pnpm run build`
 
 ## Disclaimer
 

@@ -1,35 +1,22 @@
 {
   "name": "@nexirift/db",
   "version": "0.0.1",
-  "description": "The Nexirift Drizzle database configuration and schema.",
+  "description": "The Nexirift database schema, built using Drizzle.",
   "author": "Nexirift",
   "license": "AGPL-3.0-only",
   "type": "module",
-  "module": "index.ts",
   "scripts": {
-    "switch-registry": "./utility-scripts/wrapper.sh switch-registry",
-    "db:generate": "drizzle-kit generate --config dist/drizzle.config.cjs",
-    "db:migrate": "node dist/index.cjs --config dist/drizzle.config.cjs",
-    "db:studio": "drizzle-kit studio --config dist/drizzle.config.cjs",
-    "db:all": "npm run db:generate && npm run db:migrate && npm run db:studio",
-    "db:start": "./utility-scripts/wrapper.sh db/start",
-    "db:reset": "./utility-scripts/wrapper.sh db/reset",
-    "kv:start": "./utility-scripts/wrapper.sh kv/start",
-    "kv:reset": "./utility-scripts/wrapper.sh kv/reset",
     "build": "unbuild",
     "prepack": "unbuild"
   },
-  "devDependencies": {
-    "@types/pg": "^8.15.4",
-    "drizzle-kit": "^0.31.4",
-    "unbuild": "^3.6.0"
-  },
+  "keywords": [],
+  "packageManager": "pnpm@10.13.1",
   "peerDependencies": {
-    "@electric-sql/pglite": "^0.3.0",
-    "drizzle-orm": "^0.44.3",
-    "pg": "^8.15.6",
-    "typescript": "^5.8.3",
-    "dotenv": "^17.2.1"
+    "drizzle-orm": ">=0.38.4",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "unbuild": "^3.6.0"
   },
   "publishConfig": {
     "directory": "dist",
@@ -39,10 +26,6 @@
     ".": {
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
-    },
-    "./schema": {
-      "import": "./dist/schema/index.mjs",
-      "require": "./dist/schema/index.cjs"
     }
   },
   "main": "./dist/index.cjs",

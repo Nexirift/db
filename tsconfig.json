@@ -7,7 +7,6 @@
     "resolveJsonModule": true,
     "module": "Preserve",
     "noEmit": true,
-    "types": ["node"],
     "moduleResolution": "Bundler",
     "moduleDetection": "force",
     "isolatedModules": true,
@@ -18,7 +17,11 @@
     "strict": true,
     "noImplicitOverride": true,
     "noFallthroughCasesInSwitch": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "exclude": ["**/dist", "node_modules"],
   "references": [],
