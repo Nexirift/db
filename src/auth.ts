@@ -15,6 +15,7 @@ export const userSession = pgTable("user_session", {
     .references(() => user.id, { onDelete: "cascade" }),
   impersonatedBy: citext("impersonated_by"),
   activeOrganizationId: citext("active_organization_id"),
+  activeTeamId: citext("active_team_id"),
 });
 
 export const userAccount = pgTable("user_account", {
@@ -40,8 +41,78 @@ export const userAuthVerification = pgTable("user_auth_verification", {
   identifier: citext("identifier").notNull(),
   value: citext("value").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
-  createdAt: timestamp("created_at"),
-  updatedAt: timestamp("updated_at"),
+  createdAt: timestamp("created_at").$defaultFn(
+    () => /* @__PURE__ */ new Date(),
+  ),
+  updatedAt: timestamp("updated_at").$defaultFn(
+    () => /* @__PURE__ */ new Date(),
+  ),
+});
+
+export const violation = pgTable("violation", {
+  id: citext("id").primaryKey(),
+  content: citext("content").notNull(),
+  publicComment: citext("public_comment"),
+  internalNote: citext("internal_note"),
+  severity: integer("severity").notNull(),
+  applicableRules: citext("applicable_rules").default("[]").notNull(),
+  overturned: boolean("overturned"),
+  moderatorId: citext("moderator_id").references(() => user.id, {
+    onDelete: "set null",
+  }),
+  userId: citext("user_id").references(() => user.id, { onDelete: "set null" }),
+  expiresAt: timestamp("expires_at").$defaultFn(() => {
+    const date = /* @__PURE__ */ new Date();
+    date.setDate(date.getDate() + 30);
+    return date;
+  }),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  lastUpdatedBy: citext("last_updated_by").references(() => user.id, {
+    onDelete: "set null",
+  }),
+  updatedAt: timestamp("updated_at")
+    .$defaultFn(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  amStatus: citext("am_status")
+    .$defaultFn(() => "")
+    .notNull(),
+  amMetadata: citext("am_metadata"),
+});
+
+export const violationDispute = pgTable("violation_dispute", {
+  id: citext("id").primaryKey(),
+  violationId: citext("violation_id")
+    .notNull()
+    .references(() => violation.id, { onDelete: "cascade" }),
+  userId: citext("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  reason: citext("reason").notNull(),
+  status: citext("status").default("pending").notNull(),
+  justification: citext("justification"),
+  reviewedBy: citext("reviewed_by").references(() => user.id, {
+    onDelete: "set null",
+  }),
+  reviewedAt: timestamp("reviewed_at"),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .$defaultFn(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});
+
+export const cosmosInvitation = pgTable("cosmos_invitation", {
+  id: citext("id").primaryKey(),
+  code: citext("code").notNull().unique(),
+  creatorId: citext("creator_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  userId: citext("user_id").references(() => user.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
 });
 
 export const passkey = pgTable("passkey", {
@@ -57,6 +128,7 @@ export const passkey = pgTable("passkey", {
   backedUp: boolean("backed_up").notNull(),
   transports: citext("transports"),
   createdAt: timestamp("created_at"),
+  aaguid: citext("aaguid"),
 });
 
 export const twoFactor = pgTable("two_factor", {
@@ -104,79 +176,6 @@ export const oauthConsent = pgTable("oauth_consent", {
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
   consentGiven: boolean("consent_given"),
-});
-
-export const customer = pgTable("customer", {
-  id: citext("id").primaryKey(),
-  stripeCustomerId: citext("stripe_customer_id"),
-  userId: citext("user_id"),
-  createdAt: timestamp("created_at"),
-  updatedAt: timestamp("updated_at"),
-});
-
-export const subscription = pgTable("subscription", {
-  id: citext("id").primaryKey(),
-  plan: citext("plan").notNull(),
-  referenceId: citext("reference_id").notNull(),
-  stripeCustomerId: citext("stripe_customer_id"),
-  stripeSubscriptionId: citext("stripe_subscription_id"),
-  status: citext("status"),
-  periodStart: timestamp("period_start"),
-  periodEnd: timestamp("period_end"),
-  cancelAtPeriodEnd: boolean("cancel_at_period_end"),
-  seats: integer("seats"),
-});
-
-export const cosmosInvitation = pgTable("cosmos_invitation", {
-  id: citext("id").primaryKey(),
-  code: citext("code").notNull().unique(),
-  creatorId: citext("creator_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  userId: citext("user_id").references(() => user.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").notNull(),
-  updatedAt: timestamp("updated_at").notNull(),
-});
-
-export const violation = pgTable("violation", {
-  id: citext("id").primaryKey(),
-  content: citext("content").notNull(),
-  publicComment: citext("public_comment"),
-  internalNote: citext("internal_note"),
-  severity: integer("severity").notNull(),
-  applicableRules: citext("applicable_rules").notNull(),
-  overturned: boolean("overturned"),
-  moderatorId: citext("moderator_id").references(() => user.id, {
-    onDelete: "cascade",
-  }),
-  userId: citext("user_id").references(() => user.id, { onDelete: "cascade" }),
-  expiresAt: timestamp("expires_at"),
-  createdAt: timestamp("created_at").notNull(),
-  lastUpdatedBy: citext("last_updated_by").references(() => user.id, {
-    onDelete: "cascade",
-  }),
-  updatedAt: timestamp("updated_at").notNull(),
-  amStatus: citext("am_status").notNull(),
-  amMetadata: citext("am_metadata"),
-});
-
-export const violationDispute = pgTable("violation_dispute", {
-  id: citext("id").primaryKey(),
-  violationId: citext("violation_id")
-    .notNull()
-    .references(() => violation.id, { onDelete: "cascade" }),
-  userId: citext("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  reason: citext("reason").notNull(),
-  status: citext("status").notNull(),
-  justification: citext("justification"),
-  reviewedBy: citext("reviewed_by").references(() => user.id, {
-    onDelete: "cascade",
-  }),
-  reviewedAt: timestamp("reviewed_at"),
-  createdAt: timestamp("created_at").notNull(),
-  updatedAt: timestamp("updated_at").notNull(),
 });
 
 export const jwks = pgTable("jwks", {

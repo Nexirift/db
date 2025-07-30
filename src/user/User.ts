@@ -20,8 +20,10 @@ export const user = pgTable("user", {
   id: citext("id")
     .default(sql`gen_random_uuid()`)
     .primaryKey(),
-  email: citext("email").unique(),
-  emailVerified: boolean("email_verified").notNull(),
+  email: citext("email").notNull().unique(),
+  emailVerified: boolean("email_verified")
+    .$defaultFn(() => false)
+    .notNull(),
   username: citext("username").notNull().unique(),
   displayUsername: citext("display_username"),
   displayName: citext("display_name"),
@@ -33,10 +35,9 @@ export const user = pgTable("user", {
   banReason: citext("ban_reason"),
   banExpires: timestamp("ban_expires"),
   twoFactorEnabled: boolean("two_factor_enabled"),
-  birthday: citext("birthday").notNull(), // *sigh* better-auth doesn't process Dates properly...
-  stripeCustomerId: citext("stripe_customer_id"),
+  birthday: citext("birthday"),
   usernameAliases: citext("username_aliases"),
-  invitation: citext("invitation"),
+  invitation: citext("invitation").unique(),
   flags: citext("flags"), // private version of attributes
   attributes: citext("attributes"), // public version of flags
   apPublicKey: citext("ap_public_key"),
