@@ -28,3 +28,15 @@ export const cosmosAuditLogRelations = relations(cosmosAuditLog, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+export const cosmosRole = pgTable("cosmos_role", {
+  id: citext("id").notNull().primaryKey(),
+  name: citext("name").notNull(),
+  description: citext("description").notNull(),
+  statements: citext("statements"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
